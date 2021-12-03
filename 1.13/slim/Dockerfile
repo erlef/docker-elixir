@@ -1,7 +1,7 @@
 FROM erlang:24-slim
 
 # elixir expects utf8.
-ENV ELIXIR_VERSION="v1.13.0-rc.1" \
+ENV ELIXIR_VERSION="v1.13.0" \
 	LANG=C.UTF-8
 
 RUN set -xe \
