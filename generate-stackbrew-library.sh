@@ -88,8 +88,14 @@ for version in "${versions[@]}"; do
 
 		case "$version" in
 			1.11|1.10|1.9|1.8|1.7|1.6)
-                variantArches=( ${variantArches[@]/ppc64le} )
-                variantArches=( ${variantArches[@]/s390x} )
+				variantArches=( ${variantArches[@]/ppc64le} )
+				variantArches=( ${variantArches[@]/s390x} )
+		esac
+
+		case "$variant" in
+			otp-23-slim)
+			  variantArches=( ${variantArches[@]/ppc64le} )
+			  variantArches=( ${variantArches[@]/s390x} )
 		esac
 
 		echo
