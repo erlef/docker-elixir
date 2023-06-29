@@ -56,7 +56,7 @@ extractErlangVersion() {
   awk '
         $1 == "FROM" && /erlang/ {
         match($2, /"erlang\:(.*)"/)
-        print substr($2, RSTART + 8, 2)
+        print substr($2, RSTART + 8)
         exit
       }'
 }
@@ -94,18 +94,17 @@ for version in "${versions[@]}"; do
 
 		commit="$(dirCommit "$dir")"
 
-		erlangVersion="$(git show "$commit":"$dir/Dockerfile" | extractErlangVersion )"
-		otpVersion="otp-${erlangVersion}"
-
 		variantAliases=( "${versionAliases[@]}" )
 		if [ -n "$variant" ]; then
-		 	otpVersion="$otpVersion-$variant"
 			variantAliases=( "${variantAliases[@]/%/-$variant}" )
 			variantAliases=( "${variantAliases[@]//latest-/}" )
 		fi
 
-		if [ "$otpVersion" != "$variant" ]; then
-			variantAliases=( "${variantAliases[@]}" "${versionAliases[@]/%/-$otpVersion}" )
+		erlangVersion="$(cat $dir/Dockerfile | extractErlangVersion )"
+		otpVersionAndVariant="otp-${erlangVersion}"
+
+		if [ "$otpVersionAndVariant" != "$variant" ]; then
+			variantAliases=( "${variantAliases[@]}" "${versionAliases[@]/%/-$otpVersionAndVariant}" )
 			variantAliases=( "${variantAliases[@]//latest-/}" )
 		fi
 
