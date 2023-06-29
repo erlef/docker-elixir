@@ -42,7 +42,7 @@ join() {
 	echo "${out#$sep}"
 }
 
-extractVersion() {
+extractElixirVersion() {
   awk '
         $1 == "ENV" && /_VERSION/ {
         match($2, /"v(.*)"/)
@@ -50,6 +50,15 @@ extractVersion() {
         exit
       }'
 
+}
+
+extractErlangVersion() {
+  awk '
+        $1 == "FROM" && /erlang/ {
+        match($2, /"erlang\:(.*)"/)
+        print substr($2, RSTART + 8, 2)
+        exit
+      }'
 }
 
 self="${BASH_SOURCE##*/}"
@@ -65,7 +74,7 @@ EOH
 for version in "${versions[@]}"; do
 	commit="$(dirCommit "$version")"
 
-	fullVersion="$(git show "$commit":"$version/Dockerfile" | extractVersion)"
+	fullVersion="$(git show "$commit":"$version/Dockerfile" | extractElixirVersion)"
 
 	versionAliases=( $fullVersion )
 	while :; do
@@ -85,9 +94,18 @@ for version in "${versions[@]}"; do
 
 		commit="$(dirCommit "$dir")"
 
+		erlangVersion="$(git show "$commit":"$dir/Dockerfile" | extractErlangVersion )"
+		otpVersion="otp-${erlangVersion}"
+
 		variantAliases=( "${versionAliases[@]}" )
 		if [ -n "$variant" ]; then
+		 	otpVersion="$otpVersion-$variant"
 			variantAliases=( "${variantAliases[@]/%/-$variant}" )
+			variantAliases=( "${variantAliases[@]//latest-/}" )
+		fi
+
+		if [ "$otpVersion" != "$variant" ]; then
+			variantAliases=( "${variantAliases[@]}" "${versionAliases[@]/%/-$otpVersion}" )
 			variantAliases=( "${variantAliases[@]//latest-/}" )
 		fi
 
