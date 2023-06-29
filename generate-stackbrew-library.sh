@@ -100,7 +100,7 @@ for version in "${versions[@]}"; do
 			variantAliases=( "${variantAliases[@]//latest-/}" )
 		fi
 
-		erlangVersion="$(cat $dir/Dockerfile | extractErlangVersion )"
+		erlangVersion="$(git show "$commit":"$dir/Dockerfile" | extractErlangVersion )"
 		otpVersionAndVariant="otp-${erlangVersion}"
 
 		if [ "$otpVersionAndVariant" != "$variant" ]; then
