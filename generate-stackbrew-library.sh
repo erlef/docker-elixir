@@ -1,7 +1,14 @@
 #!/bin/bash
 set -eu
 
-declare -a -r versions=(1.16 1.15 1.14 1.13 1.12 1.11 1.10 1.9 1.8 1.7 )
+declare -a -r versions=(
+	# https://github.com/elixir-lang/elixir/blob/main/SECURITY.md#supported-versions
+	1.16
+	1.15
+	1.14
+	1.13
+	1.12
+)
 declare -A -r aliases=(
 	[1.16]='latest'
 )
