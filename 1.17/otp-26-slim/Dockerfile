@@ -1,18 +1,19 @@
-FROM erlang:25-alpine
+FROM erlang:26-slim
 
 # elixir expects utf8.
-ENV ELIXIR_VERSION="v1.15.8" \
+ENV ELIXIR_VERSION="v1.17.0-rc.0" \
 	LANG=C.UTF-8
 
 RUN set -xe \
 	&& ELIXIR_DOWNLOAD_URL="https://github.com/elixir-lang/elixir/archive/${ELIXIR_VERSION}.tar.gz" \
-	&& ELIXIR_DOWNLOAD_SHA256="09e697ab13fc60f27adaba9b71f8793105acd4320a89b16be0ceb4a13426d779" \
+	&& ELIXIR_DOWNLOAD_SHA256="b370badec5009e875a51775acf052f8658b0b7c0f44be06defa6a64ecc3d9d22" \
 	&& buildDeps=' \
 		ca-certificates \
 		curl \
 		make \
 	' \
-	&& apk add --no-cache --virtual .build-deps $buildDeps \
+	&& apt-get update \
+	&& apt-get install -y --no-install-recommends $buildDeps \
 	&& curl -fSL -o elixir-src.tar.gz $ELIXIR_DOWNLOAD_URL \
 	&& echo "$ELIXIR_DOWNLOAD_SHA256  elixir-src.tar.gz" | sha256sum -c - \
 	&& mkdir -p /usr/local/src/elixir \
@@ -22,6 +23,7 @@ RUN set -xe \
 	&& make install clean \
 	&& find /usr/local/src/elixir/ -type f -not -regex "/usr/local/src/elixir/lib/[^\/]*/lib.*" -exec rm -rf {} + \
 	&& find /usr/local/src/elixir/ -type d -depth -empty -delete \
-	&& apk del .build-deps
+	&& apt-get purge -y --auto-remove $buildDeps \
+	&& rm -rf /var/lib/apt/lists/*
 
 CMD ["iex"]

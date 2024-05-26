@@ -3,6 +3,7 @@ set -eu
 
 declare -a -r versions=(
 	# https://github.com/elixir-lang/elixir/blob/main/SECURITY.md#supported-versions
+  1.17
 	1.16
 	1.15
 	1.14
@@ -88,7 +89,7 @@ for version in "${versions[@]}"; do
 	done
 	versionAliases+=( $version ${aliases[$version]:-} )
 
-	for variant in '' slim alpine otp-23-slim otp-{21,22,24,25}{,-alpine,-slim}; do
+	for variant in '' slim alpine otp-23-slim otp-{21,22,24,25,26}{,-alpine,-slim}; do
 		dir="$version${variant:+/$variant}"
 		[ -f "$dir/Dockerfile" ] || continue
 
