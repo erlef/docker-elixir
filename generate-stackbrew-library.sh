@@ -11,7 +11,7 @@ declare -a -r versions=(
 	1.12
 )
 declare -A -r aliases=(
-	[1.16]='latest'
+	[1.17]='latest'
 )
 
 # get the most recent commit which modified any of "$@"
