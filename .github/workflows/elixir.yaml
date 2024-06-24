@@ -7,23 +7,65 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        elixir: ['DIR=1.17', 'DIR=1.17 VARIANT=slim', 'DIR=1.17 VARIANT=alpine', 'DIR=1.17 VARIANT=otp-26', 'DIR=1.17 VARIANT=otp-26-slim', 'DIR=1.17 VARIANT=otp-26-alpine', 'DIR=1.17 VARIANT=otp-25', 'DIR=1.17 VARIANT=otp-25-slim', 'DIR=1.17 VARIANT=otp-25-alpine',
-              'DIR=1.16', 'DIR=1.16 VARIANT=slim', 'DIR=1.16 VARIANT=alpine', 'DIR=1.16 VARIANT=otp-25', 'DIR=1.16 VARIANT=otp-25-slim', 'DIR=1.16 VARIANT=otp-25-alpine', 'DIR=1.16 VARIANT=otp-24', 'DIR=1.16 VARIANT=otp-24-slim', 'DIR=1.16 VARIANT=otp-24-alpine',
-              'DIR=1.15', 'DIR=1.15 VARIANT=slim', 'DIR=1.15 VARIANT=alpine', 'DIR=1.15 VARIANT=otp-25', 'DIR=1.15 VARIANT=otp-25-slim', 'DIR=1.15 VARIANT=otp-25-alpine', 'DIR=1.15 VARIANT=otp-24', 'DIR=1.15 VARIANT=otp-24-slim', 'DIR=1.15 VARIANT=otp-24-alpine',
-              'DIR=1.14', 'DIR=1.14 VARIANT=slim', 'DIR=1.14 VARIANT=alpine', 'DIR=1.14 VARIANT=otp-25', 'DIR=1.14 VARIANT=otp-25-slim', 'DIR=1.14 VARIANT=otp-25-alpine', 'DIR=1.14 VARIANT=otp-24', 'DIR=1.14 VARIANT=otp-24-slim', 'DIR=1.14 VARIANT=otp-24-alpine',
-              'DIR=1.13', 'DIR=1.13 VARIANT=slim', 'DIR=1.13 VARIANT=alpine', 'DIR=1.13 VARIANT=otp-23-slim', 'DIR=1.13 VARIANT=otp-25', 'DIR=1.13 VARIANT=otp-25-slim', 'DIR=1.13 VARIANT=otp-25-alpine',
-              'DIR=1.12', 'DIR=1.12 VARIANT=slim', 'DIR=1.12 VARIANT=alpine'
-              ]
+        elixir:
+          [
+            "DIR=1.17",
+            "DIR=1.17 VARIANT=slim",
+            "DIR=1.17 VARIANT=alpine",
+            "DIR=1.17 VARIANT=otp-26",
+            "DIR=1.17 VARIANT=otp-26-slim",
+            "DIR=1.17 VARIANT=otp-26-alpine",
+            "DIR=1.17 VARIANT=otp-25",
+            "DIR=1.17 VARIANT=otp-25-slim",
+            "DIR=1.17 VARIANT=otp-25-alpine",
+            "DIR=1.16",
+            "DIR=1.16 VARIANT=slim",
+            "DIR=1.16 VARIANT=alpine",
+            "DIR=1.16 VARIANT=otp-25",
+            "DIR=1.16 VARIANT=otp-25-slim",
+            "DIR=1.16 VARIANT=otp-25-alpine",
+            "DIR=1.16 VARIANT=otp-24",
+            "DIR=1.16 VARIANT=otp-24-slim",
+            "DIR=1.16 VARIANT=otp-24-alpine",
+            "DIR=1.15",
+            "DIR=1.15 VARIANT=slim",
+            "DIR=1.15 VARIANT=alpine",
+            "DIR=1.15 VARIANT=otp-25",
+            "DIR=1.15 VARIANT=otp-25-slim",
+            "DIR=1.15 VARIANT=otp-25-alpine",
+            "DIR=1.15 VARIANT=otp-24",
+            "DIR=1.15 VARIANT=otp-24-slim",
+            "DIR=1.15 VARIANT=otp-24-alpine",
+            "DIR=1.14",
+            "DIR=1.14 VARIANT=slim",
+            "DIR=1.14 VARIANT=alpine",
+            "DIR=1.14 VARIANT=otp-25",
+            "DIR=1.14 VARIANT=otp-25-slim",
+            "DIR=1.14 VARIANT=otp-25-alpine",
+            "DIR=1.14 VARIANT=otp-24",
+            "DIR=1.14 VARIANT=otp-24-slim",
+            "DIR=1.14 VARIANT=otp-24-alpine",
+            "DIR=1.13",
+            "DIR=1.13 VARIANT=slim",
+            "DIR=1.13 VARIANT=alpine",
+            "DIR=1.13 VARIANT=otp-23-slim",
+            "DIR=1.13 VARIANT=otp-25",
+            "DIR=1.13 VARIANT=otp-25-slim",
+            "DIR=1.13 VARIANT=otp-25-alpine",
+            "DIR=1.12",
+            "DIR=1.12 VARIANT=slim",
+            "DIR=1.12 VARIANT=alpine",
+          ]
       fail-fast: false
     steps:
-    - uses: actions/checkout@v2
-    - name: Build
-      run: |
-           ${{ matrix.elixir }}
-           git clone https://github.com/docker-library/official-images.git ~/official-images
-           cd "$DIR"
-           eval $(awk '/ELIXIR_VERSION=/ { sub(/@/, "-", $2); print $2; exit }' ${VARIANT:-.}/Dockerfile)
-           image="elixir:${ELIXIR_VERSION#v}${VARIANT:+-$VARIANT}"
-           docker build --pull -t "$image" "${VARIANT:-.}"
-           ~/official-images/test/run.sh "$image"
-           docker images
+      - uses: actions/checkout@v2
+      - name: Build
+        run: |
+          ${{ matrix.elixir }}
+          git clone https://github.com/docker-library/official-images.git ~/official-images
+          cd "$DIR"
+          eval $(awk '/ELIXIR_VERSION=/ { sub(/@/, "-", $2); print $2; exit }' ${VARIANT:-.}/Dockerfile)
+          image="elixir:${ELIXIR_VERSION#v}${VARIANT:+-$VARIANT}"
+          docker build --pull -t "$image" "${VARIANT:-.}"
+          ~/official-images/test/run.sh "$image"
+          docker images
