@@ -119,7 +119,7 @@ for version in "${versions[@]}"; do
 		esac
 
 		case "$variant" in
-			otp-23-slim)
+			otp-24 | otp-24-alpine | otp-24-slim | otp-25 | otp-25-alpine | otp-25-slim )
 			  variantArches=( ${variantArches[@]/ppc64le} )
 			  variantArches=( ${variantArches[@]/s390x} )
 		esac
