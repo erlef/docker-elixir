@@ -9,6 +9,15 @@ jobs:
       matrix:
         elixir:
           [
+            "DIR=1.18",
+            "DIR=1.18 VARIANT=slim",
+            "DIR=1.18 VARIANT=alpine",
+            "DIR=1.18 VARIANT=otp-26",
+            "DIR=1.18 VARIANT=otp-26-slim",
+            "DIR=1.18 VARIANT=otp-26-alpine",
+            "DIR=1.18 VARIANT=otp-25",
+            "DIR=1.18 VARIANT=otp-25-slim",
+            "DIR=1.18 VARIANT=otp-25-alpine",
             "DIR=1.17",
             "DIR=1.17 VARIANT=slim",
             "DIR=1.17 VARIANT=alpine",
