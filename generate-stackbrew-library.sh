@@ -3,7 +3,8 @@ set -eu
 
 declare -a -r versions=(
 	# https://github.com/elixir-lang/elixir/blob/main/SECURITY.md#supported-versions
-  1.17
+	1.18
+	1.17
 	1.16
 	1.15
 	1.14
@@ -11,7 +12,7 @@ declare -a -r versions=(
 	1.12
 )
 declare -A -r aliases=(
-	[1.17]='latest'
+	[1.18]='latest'
 )
 
 # get the most recent commit which modified any of "$@"
