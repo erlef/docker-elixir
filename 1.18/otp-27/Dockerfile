@@ -1,4 +1,4 @@
-FROM erlang:28-alpine
+FROM erlang:27
 
 # elixir expects utf8.
 ENV ELIXIR_VERSION="v1.18.4" \
@@ -7,12 +7,6 @@ ENV ELIXIR_VERSION="v1.18.4" \
 RUN set -xe \
 	&& ELIXIR_DOWNLOAD_URL="https://github.com/elixir-lang/elixir/archive/${ELIXIR_VERSION}.tar.gz" \
 	&& ELIXIR_DOWNLOAD_SHA256="8e136c0a92160cdad8daa74560e0e9c6810486bd232fbce1709d40fcc426b5e0" \
-	&& buildDeps=' \
-		ca-certificates \
-		curl \
-		make \
-	' \
-	&& apk add --no-cache --virtual .build-deps $buildDeps \
 	&& curl -fSL -o elixir-src.tar.gz $ELIXIR_DOWNLOAD_URL \
 	&& echo "$ELIXIR_DOWNLOAD_SHA256  elixir-src.tar.gz" | sha256sum -c - \
 	&& mkdir -p /usr/local/src/elixir \
@@ -21,7 +15,6 @@ RUN set -xe \
 	&& cd /usr/local/src/elixir \
 	&& make install clean \
 	&& find /usr/local/src/elixir/ -type f -not -regex "/usr/local/src/elixir/lib/[^\/]*/lib.*" -exec rm -rf {} + \
-	&& find /usr/local/src/elixir/ -type d -depth -empty -delete \
-	&& apk del .build-deps
+	&& find /usr/local/src/elixir/ -type d -depth -empty -delete
 
 CMD ["iex"]
