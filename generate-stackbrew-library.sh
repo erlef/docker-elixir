@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -eu
 
 declare -a -r versions=(
@@ -90,7 +90,7 @@ for version in "${versions[@]}"; do
 	done
 	versionAliases+=( $version ${aliases[$version]:-} )
 
-	for variant in '' slim alpine otp-23-slim otp-{21,22,24,25,26}{,-alpine,-slim}; do
+	for variant in '' slim alpine otp-23-slim otp-{24,25,26,27}{,-alpine,-slim}; do
 		dir="$version${variant:+/$variant}"
 		[ -f "$dir/Dockerfile" ] || continue
 
