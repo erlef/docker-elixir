@@ -3,14 +3,14 @@ set -eu
 
 declare -a -r versions=(
 	# https://github.com/elixir-lang/elixir/blob/main/SECURITY.md#supported-versions
+	1.20
 	1.19
 	1.18
 	1.17
 	1.16
-	1.15
 )
 declare -A -r aliases=(
-	[1.19]='latest'
+	[1.20]='latest'
 )
 
 # get the most recent commit which modified any of "$@"
@@ -88,7 +88,7 @@ for version in "${versions[@]}"; do
 	done
 	versionAliases+=( $version ${aliases[$version]:-} )
 
-	for variant in '' slim alpine otp-23-slim otp-{24,25,26,27,28}{,-alpine,-slim}; do
+	for variant in '' slim alpine otp-23-slim otp-{24,25,26,27,28,29}{,-alpine,-slim}; do
 		dir="$version${variant:+/$variant}"
 		[ -f "$dir/Dockerfile" ] || continue
 
