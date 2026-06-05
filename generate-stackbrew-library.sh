@@ -9,9 +9,11 @@ declare -a -r versions=(
 	1.17
 	1.16
 )
-declare -A -r aliases=(
-	[1.20]='latest'
-)
+versionAliasesExtra() {
+	case "$1" in
+		1.20) echo 'latest' ;;
+	esac
+}
 
 # get the most recent commit which modified any of "$@"
 fileCommit() {
@@ -86,7 +88,9 @@ for version in "${versions[@]}"; do
 		fullVersion=$localVersion
 		# echo "${versionAliases[@]}"
 	done
-	versionAliases+=( $version ${aliases[$version]:-} )
+	versionAliases+=( "$version" )
+	extraAliases="$(versionAliasesExtra "$version")"
+	[ -z "$extraAliases" ] || versionAliases+=( $extraAliases )
 
 	for variant in '' slim alpine otp-23-slim otp-{24,25,26,27,28,29}{,-alpine,-slim}; do
 		dir="$version${variant:+/$variant}"
