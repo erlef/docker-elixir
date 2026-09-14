@@ -9,12 +9,12 @@ RUN set -xe \
 	&& ELIXIR_DOWNLOAD_SHA256="6116c14d5e61ec301240cebeacbf9e97125a4d45cd9071e65e0b958d5ebf3890" \
 	&& buildDeps=' \
 		ca-certificates \
-		curl \
+		wget \
 		make \
 	' \
 	&& apt-get update \
 	&& apt-get install -y --no-install-recommends $buildDeps \
-	&& curl -fSL -o elixir-src.tar.gz $ELIXIR_DOWNLOAD_URL \
+	&& wget -O elixir-src.tar.gz $ELIXIR_DOWNLOAD_URL \
 	&& echo "$ELIXIR_DOWNLOAD_SHA256  elixir-src.tar.gz" | sha256sum -c - \
 	&& mkdir -p /usr/local/src/elixir \
 	&& tar -xzC /usr/local/src/elixir --strip-components=1 -f elixir-src.tar.gz \
